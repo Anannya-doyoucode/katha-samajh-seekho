@@ -93,6 +93,7 @@ export function TranslationBlock({
   heading,
   note,
   text,
+  speakable,
   lang,
   tone = "plain",
   visual,
@@ -101,6 +102,8 @@ export function TranslationBlock({
   heading: string;
   note?: string;
   text: string;
+  /** Full multilingual record, used for audio fallback when a voice is missing. */
+  speakable?: Speakable;
   lang: LangCode;
   tone?: "plain" | "highlight";
   visual?: string;

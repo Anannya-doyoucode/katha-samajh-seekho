@@ -3,6 +3,7 @@ import { BookOpen, LayoutDashboard, Languages, Mic, ClipboardCheck, BarChart3, W
 import { useKatha } from "@/lib/katha-store";
 import { langName } from "@/lib/katha-data";
 import { Switch } from "@/components/ui/switch";
+import { LangSwitcher } from "./LanguagePair";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -82,9 +83,10 @@ export function Shell({ children }: { children: React.ReactNode }) {
             </nav>
           </div>
           <div className="order-2 ml-auto flex items-center gap-3 md:order-3">
+            <LangSwitcher compact className="hidden sm:flex" />
             <Link
               to="/language"
-              className="hidden items-center gap-2 rounded-md border px-2.5 py-1.5 text-xs sm:flex"
+              className="flex items-center gap-2 rounded-md border px-2.5 py-1.5 text-xs sm:hidden"
               title="Change language pair"
             >
               <span className="font-medium">{langName(source)}</span>
