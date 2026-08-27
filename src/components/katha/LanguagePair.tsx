@@ -36,6 +36,66 @@ export function LanguageSelect({
   );
 }
 
+/**
+ * Compact any-to-any switcher used on every screen. Changing either side
+ * instantly re-renders lesson text, explanations, questions, options and audio.
+ */
+export function LangSwitcher({
+  compact = false,
+  className,
+}: {
+  compact?: boolean;
+  className?: string;
+}) {
+  const { source, target, setSource, setTarget, swap } = useKatha();
+  return (
+    <div className={cn("flex flex-wrap items-center gap-2", className)}>
+      {!compact && (
+        <span className="label-caps text-muted-foreground">Teaching in</span>
+      )}
+      <Select value={source} onValueChange={(v) => setSource(v as LangCode)}>
+        <SelectTrigger className="h-8 w-[132px] text-xs" aria-label="Teacher language">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {LANGUAGES.map((l) => (
+            <SelectItem key={l.code} value={l.code} className="text-xs">
+              {l.name} — {l.native}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={swap}
+        className="h-8 w-8 shrink-0 text-muted-foreground"
+        title="Swap languages"
+        aria-label="Swap languages"
+      >
+        <ArrowLeftRight className="h-3.5 w-3.5" />
+      </Button>
+      <Select value={target} onValueChange={(v) => setTarget(v as LangCode)}>
+        <SelectTrigger className="h-8 w-[132px] text-xs" aria-label="Child language">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {LANGUAGES.map((l) => (
+            <SelectItem key={l.code} value={l.code} className="text-xs">
+              {l.name} — {l.native}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      {!compact && (
+        <span className="text-[11px] text-muted-foreground">
+          Content, questions and audio switch instantly
+        </span>
+      )}
+    </div>
+  );
+}
+
 export function LanguagePair({ title = "Language setup" }: { title?: string }) {
   const { source, target, setSource, setTarget, swap } = useKatha();
   const targetOffline = LANGUAGES.find((l) => l.code === target)?.offline;
