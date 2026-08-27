@@ -6,8 +6,9 @@ import { Shell, PageTitle } from "@/components/katha/Shell";
 import { StatusPill } from "@/components/katha/StatusPill";
 import { SpeakButton } from "@/components/katha/SpeakButton";
 import { SuggestCorrection } from "@/components/katha/TranslationBlock";
+import { LangSwitcher } from "@/components/katha/LanguagePair";
 import { useKatha } from "@/lib/katha-store";
-import { CONCEPTS, langName, type ConceptId, type Status } from "@/lib/katha-data";
+import { CONCEPTS, LANGUAGES, langName, type ConceptId, type Status } from "@/lib/katha-data";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/check")({
@@ -121,6 +122,9 @@ function CheckPage() {
                 </p>
                 <h2 className="mt-2 text-lg font-bold">{c.label.en}</h2>
                 <p className="text-sm text-muted-foreground">{c.label[target]}</p>
+                <div className="mt-2">
+                  <SpeakButton text={c.label} lang={target} label="Play" />
+                </div>
                 <div className="mt-3">
                   {r ? <StatusPill status={r.status} /> : <span className="text-sm text-muted-foreground">Not attempted</span>}
                 </div>
@@ -134,7 +138,10 @@ function CheckPage() {
             );
           })}
         </div>
-        <div className="mt-6 flex flex-wrap gap-2">
+        <div className="mt-6 rounded-md border bg-secondary/40 p-3">
+          <LangSwitcher />
+        </div>
+        <div className="mt-4 flex flex-wrap gap-2">
           <Button variant="outline" onClick={restart} className="gap-1.5">
             <RotateCcw className="h-4 w-4" /> Run the check again
           </Button>
@@ -162,9 +169,12 @@ function CheckPage() {
                 <Kind className="h-3.5 w-3.5" /> {KIND_META[question.kind].label}
                 {round === 1 && " · new question, same concept"}
               </span>
-              <SpeakButton text={question.prompt[target]} lang={target} label="Read question" />
+              <SpeakButton text={question.prompt} lang={target} label="Read question aloud" />
             </div>
             <h2 className="text-lg leading-relaxed font-semibold">{question.prompt[target]}</h2>
+            <div className="mt-3 rounded-md border bg-secondary/40 p-2.5">
+              <LangSwitcher />
+            </div>
 
             {question.kind === "voice" ? (
               <div className="mt-5 rounded-md border p-5 text-center">
@@ -224,6 +234,21 @@ function CheckPage() {
                 })}
               </div>
             )}
+
+            {question.kind !== "voice" && (
+              <div className="mt-4 flex flex-wrap items-center gap-2 border-t pt-3">
+                <SpeakButton
+                  text={Object.fromEntries(
+                    LANGUAGES.map((l) => [
+                      l.code,
+                      question.options.map((o) => o.label[l.code]).join(". "),
+                    ]),
+                  )}
+                  lang={target}
+                  label="Read the answer options aloud"
+                />
+              </div>
+            )}
           </section>
 
           {phase === "correct" && (
@@ -261,7 +286,7 @@ function CheckPage() {
                 {concept.kathaAlt[target]}
               </p>
               <div className="mt-3 flex flex-wrap items-center gap-2">
-                <SpeakButton text={concept.kathaAlt[target]} lang={target} label="Play new explanation" />
+                <SpeakButton text={concept.kathaAlt} lang={target} label="Play new explanation" />
                 <SuggestCorrection text={concept.kathaAlt[target]} lang={target} />
                 <Button
                   onClick={() => {

@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Shell, PageTitle } from "@/components/katha/Shell";
+import { LangSwitcher } from "@/components/katha/LanguagePair";
 import { useKatha } from "@/lib/katha-store";
 import { LESSONS, CONCEPTS } from "@/lib/katha-data";
 import { cn } from "@/lib/utils";
@@ -38,6 +39,10 @@ function LessonsPage() {
         title="Select a lesson"
         subtitle="Pick the lesson you are teaching now. KATHA will prepare the vernacular explanation, audio and understanding check for it."
       />
+
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-md border bg-secondary/40 p-3">
+        <LangSwitcher />
+      </div>
 
       <div className="grid gap-4 md:grid-cols-2">
         {LESSONS.map((lesson) => {
