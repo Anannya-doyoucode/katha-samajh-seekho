@@ -8,7 +8,7 @@ import { SpeakButton } from "@/components/katha/SpeakButton";
 import { SuggestCorrection } from "@/components/katha/TranslationBlock";
 import { LangSwitcher } from "@/components/katha/LanguagePair";
 import { useKatha } from "@/lib/katha-store";
-import { CONCEPTS, langName, type ConceptId, type Status } from "@/lib/katha-data";
+import { CONCEPTS, LANGUAGES, langName, type ConceptId, type Status } from "@/lib/katha-data";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/check")({
@@ -238,7 +238,12 @@ function CheckPage() {
             {question.kind !== "voice" && (
               <div className="mt-4 flex flex-wrap items-center gap-2 border-t pt-3">
                 <SpeakButton
-                  text={question.options.map((o) => o.label[target]).join(". ")}
+                  text={Object.fromEntries(
+                    LANGUAGES.map((l) => [
+                      l.code,
+                      question.options.map((o) => o.label[l.code]).join(". "),
+                    ]),
+                  )}
                   lang={target}
                   label="Read the answer options aloud"
                 />
