@@ -55,7 +55,7 @@ export function LangSwitcher({
         <span className="label-caps text-muted-foreground">Teaching in</span>
       )}
       <Select value={source} onValueChange={(v) => setSource(v as LangCode)}>
-        <SelectTrigger className="h-8 w-[132px] text-xs" aria-label="Teacher language">
+        <SelectTrigger className="h-8 w-[152px] text-xs" aria-label="Teacher language">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -77,7 +77,7 @@ export function LangSwitcher({
         <ArrowLeftRight className="h-3.5 w-3.5" />
       </Button>
       <Select value={target} onValueChange={(v) => setTarget(v as LangCode)}>
-        <SelectTrigger className="h-8 w-[132px] text-xs" aria-label="Child language">
+        <SelectTrigger className="h-8 w-[152px] text-xs" aria-label="Child language">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
