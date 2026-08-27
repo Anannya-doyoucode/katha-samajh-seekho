@@ -234,6 +234,16 @@ function CheckPage() {
                 })}
               </div>
             )}
+
+            {question.kind !== "voice" && (
+              <div className="mt-4 flex flex-wrap items-center gap-2 border-t pt-3">
+                <SpeakButton
+                  text={question.options.map((o) => o.label[target]).join(". ")}
+                  lang={target}
+                  label="Read the answer options aloud"
+                />
+              </div>
+            )}
           </section>
 
           {phase === "correct" && (

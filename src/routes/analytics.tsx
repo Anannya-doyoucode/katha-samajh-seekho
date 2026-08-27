@@ -3,6 +3,8 @@ import { ArrowRight, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Shell, PageTitle } from "@/components/katha/Shell";
+import { LangSwitcher } from "@/components/katha/LanguagePair";
+import { SpeakButton } from "@/components/katha/SpeakButton";
 import { StatusPill } from "@/components/katha/StatusPill";
 import { useKatha } from "@/lib/katha-store";
 import { CONCEPTS, STUDENTS, langName, type Status } from "@/lib/katha-data";
@@ -61,6 +63,10 @@ function Analytics() {
           </Button>
         }
       />
+
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-md border bg-secondary/40 p-3">
+        <LangSwitcher />
+      </div>
 
       <div className="grid gap-5 lg:grid-cols-3">
         <div className="space-y-5 lg:col-span-2">
@@ -142,9 +148,12 @@ function Analytics() {
             <p className="mt-2 rounded-md border bg-secondary/60 p-3 text-sm">
               {weakest.kathaAlt[target]}
             </p>
-            <Button asChild size="sm" className="mt-3">
-              <Link to="/classroom">Open in live classroom</Link>
-            </Button>
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <SpeakButton text={weakest.kathaAlt} lang={target} label="Play explanation" />
+              <Button asChild size="sm">
+                <Link to="/classroom">Open in live classroom</Link>
+              </Button>
+            </div>
           </section>
 
           <section className="panel p-5 text-sm">

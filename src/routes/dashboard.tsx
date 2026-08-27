@@ -3,6 +3,7 @@ import { ArrowRight, Users, Clock, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Shell, PageTitle } from "@/components/katha/Shell";
+import { LangSwitcher } from "@/components/katha/LanguagePair";
 import { StatusPill } from "@/components/katha/StatusPill";
 import { LanguagePair } from "@/components/katha/LanguagePair";
 import { useKatha } from "@/lib/katha-store";
@@ -59,6 +60,10 @@ function Dashboard() {
           </Button>
         }
       />
+
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-md border bg-secondary/40 p-3">
+        <LangSwitcher />
+      </div>
 
       <div className="grid gap-5 lg:grid-cols-3">
         <div className="space-y-5 lg:col-span-2">
