@@ -252,6 +252,7 @@ function Classroom() {
               heading="2 · Translation"
               note={`Literal translation in ${langName(target)}`}
               text={concept.translation[target]}
+              speakable={concept.translation}
               lang={target}
             />
           )}
@@ -262,6 +263,7 @@ function Classroom() {
                 heading="3 · KATHA explanation"
                 note="Not a translation — the concept re-taught for a Grade 3 child using familiar local examples"
                 text={altShown ? concept.kathaAlt[target] : concept.katha[target]}
+                speakable={altShown ? concept.kathaAlt : concept.katha}
                 lang={target}
                 tone="highlight"
                 visual={concept.visual}
@@ -286,7 +288,7 @@ function Classroom() {
                     </p>
                   </div>
                   <SpeakButton
-                    text={altShown ? concept.kathaAlt[target] : concept.katha[target]}
+                    text={altShown ? concept.kathaAlt : concept.katha}
                     lang={target}
                     label="Play explanation"
                   />
@@ -308,6 +310,7 @@ function Classroom() {
                   ))}
                 </div>
                 <div className="mt-4 flex flex-wrap items-center gap-2 border-t pt-4">
+                  <SpeakButton text={concept.label} lang={target} label="Say the word" />
                   <SuggestCorrection text={concept.label[target]} lang={target} />
                   <Button asChild size="sm">
                     <Link to="/check">Check understanding</Link>
