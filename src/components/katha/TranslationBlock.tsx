@@ -12,7 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { SpeakButton } from "./SpeakButton";
+import { SpeakButton, type Speakable } from "./SpeakButton";
 import { useKatha } from "@/lib/katha-store";
 import { langName, langNative, type LangCode } from "@/lib/katha-data";
 import { cn } from "@/lib/utils";
@@ -134,7 +134,7 @@ export function TranslationBlock({
         <p className="text-[15px] leading-relaxed">{text}</p>
       </div>
       <div className="mt-3 flex flex-wrap items-center gap-2 border-t pt-3">
-        <SpeakButton text={text} lang={lang} />
+        <SpeakButton text={speakable ?? text} lang={lang} />
         <SuggestCorrection text={text} lang={lang} />
         {children}
       </div>
