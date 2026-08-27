@@ -30,7 +30,13 @@ interface KathaState {
   addCorrection: (c: { lang: LangCode; original: string; suggestion: string }) => void;
 }
 
-const Ctx = createContext<KathaState | null>(null);
+// Keep a single context instance even if this module is evaluated twice
+// (HMR reloads / route code-splitting), otherwise consumers can look up a
+// different context than the provider wrote to and throw.
+const g = globalThis as unknown as {
+  __kathaCtx?: React.Context<KathaState | null>;
+};
+const Ctx = (g.__kathaCtx ??= createContext<KathaState | null>(null));
 
 const KEY = "katha-state-v1";
 
