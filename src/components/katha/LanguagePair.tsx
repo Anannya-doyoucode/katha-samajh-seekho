@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select";
 import { useKatha } from "@/lib/katha-store";
 import { LANGUAGES, langName, langNative, type LangCode } from "@/lib/katha-data";
+import { cn } from "@/lib/utils";
 
 export function LanguageSelect({
   value,
