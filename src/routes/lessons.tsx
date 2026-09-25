@@ -6,19 +6,25 @@ import { Progress } from "@/components/ui/progress";
 import { Shell, PageTitle } from "@/components/katha/Shell";
 import { LangSwitcher } from "@/components/katha/LanguagePair";
 import { useKatha } from "@/lib/katha-store";
+import { useSchool } from "@/lib/school-store";
+import { LectureCreator } from "@/components/katha/LectureCreator";
+import { useState } from "react";
+import { Plus, PlayCircle } from "lucide-react";
 import { LESSONS, CONCEPTS } from "@/lib/katha-data";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/lessons")({
   head: () => ({
     meta: [
-      { title: "Select a Lesson — KATHA" },
+      { title: "Lessons & Lectures — KATHA" },
       {
         name: "description",
         content:
           "Choose today's lesson from the Grade 2-4 EVS, Mathematics and Language syllabus, with offline availability shown for each lesson.",
       },
-      { property: "og:title", content: "Select a Lesson — KATHA" },
+      { property: "og:title", content: "Lessons & Lectures — KATHA" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       {
         property: "og:description",
         content: "Grade 3 EVS 'Parts of a Plant' and other lessons, ready to teach online or offline.",
@@ -31,14 +37,43 @@ export const Route = createFileRoute("/lessons")({
 function LessonsPage() {
   const { lessonId, setLessonId } = useKatha();
   const navigate = useNavigate();
+  const { lectures } = useSchool();
+  const [creating, setCreating] = useState(false);
 
   return (
     <Shell>
       <PageTitle
-        eyebrow="Step 1 of 4"
-        title="Select a lesson"
-        subtitle="Pick the lesson you are teaching now. KATHA will prepare the vernacular explanation, audio and understanding check for it."
+        eyebrow="Lessons & Lectures"
+        title="Multilingual video lectures"
+        subtitle="Record or upload a lecture once. KATHA prepares captions and audio in English, Hindi, Santhali, Mundari and Ho for the projector."
+        right={!creating && <Button onClick={() => setCreating(true)}><Plus className="h-4 w-4" /> Create New Lecture</Button>}
       />
+
+      {creating && <LectureCreator onClose={() => setCreating(false)} />}
+
+      <div className="panel mb-8 divide-y">
+        {lectures.map((l) => (
+          <div key={l.id} className="flex flex-wrap items-center gap-3 p-4">
+            <div className="min-w-0 flex-1">
+              <p className="font-semibold">{l.title}</p>
+              <p className="text-xs text-muted-foreground">{l.cls} {l.subject === "Environmental Studies" ? "EVS" : l.subject}{l.topic ? ` · ${l.topic}` : ""}</p>
+            </div>
+            <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-medium", l.status === "ready" ? "bg-status-good-soft text-status-good" : "bg-status-warn-soft text-status-warn")}>
+              {l.status === "ready" ? "Ready" : "Processing"}
+            </span>
+            {l.status === "ready" ? (
+              <Button asChild size="sm" variant="outline">
+                <Link to="/lectures/$id" params={{ id: l.id }}><PlayCircle className="h-4 w-4" /> Play</Link>
+              </Button>
+            ) : (
+              <Button size="sm" variant="outline" disabled>Play</Button>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <h2 className="mb-1 text-lg font-bold">Live classroom lesson plans</h2>
+      <p className="mb-3 text-sm text-muted-foreground">Pick the lesson you are teaching live. KATHA prepares the vernacular explanation and audio for it.</p>
 
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-md border bg-secondary/40 p-3">
         <LangSwitcher />
