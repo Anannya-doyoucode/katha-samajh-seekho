@@ -11,12 +11,16 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
+import { Route as AssessmentsRouteImport } from './routes/assessments'
 import { Route as CheckRouteImport } from './routes/check'
 import { Route as ClassroomRouteImport } from './routes/classroom'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as LanguageRouteImport } from './routes/language'
 import { Route as LessonsRouteImport } from './routes/lessons'
+import { Route as ProgressRouteImport } from './routes/progress'
+import { Route as RemedialRouteImport } from './routes/remedial'
 import { Route as LecturesIdRouteImport } from './routes/lectures.$id'
+import { Route as ProgressRollRouteImport } from './routes/progress.$roll'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -26,6 +30,11 @@ const IndexRoute = IndexRouteImport.update({
 const AnalyticsRoute = AnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessmentsRoute = AssessmentsRouteImport.update({
+  id: '/assessments',
+  path: '/assessments',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckRoute = CheckRouteImport.update({
@@ -53,84 +62,126 @@ const LessonsRoute = LessonsRouteImport.update({
   path: '/lessons',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProgressRoute = ProgressRouteImport.update({
+  id: '/progress',
+  path: '/progress',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RemedialRoute = RemedialRouteImport.update({
+  id: '/remedial',
+  path: '/remedial',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LecturesIdRoute = LecturesIdRouteImport.update({
   id: '/lectures/$id',
   path: '/lectures/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProgressRollRoute = ProgressRollRouteImport.update({
+  id: '/$roll',
+  path: '/$roll',
+  getParentRoute: () => ProgressRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
+  '/assessments': typeof AssessmentsRoute
   '/check': typeof CheckRoute
   '/classroom': typeof ClassroomRoute
   '/dashboard': typeof DashboardRoute
   '/language': typeof LanguageRoute
   '/lessons': typeof LessonsRoute
+  '/progress': typeof ProgressRouteWithChildren
+  '/remedial': typeof RemedialRoute
   '/lectures/$id': typeof LecturesIdRoute
+  '/progress/$roll': typeof ProgressRollRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
+  '/assessments': typeof AssessmentsRoute
   '/check': typeof CheckRoute
   '/classroom': typeof ClassroomRoute
   '/dashboard': typeof DashboardRoute
   '/language': typeof LanguageRoute
   '/lessons': typeof LessonsRoute
+  '/progress': typeof ProgressRouteWithChildren
+  '/remedial': typeof RemedialRoute
   '/lectures/$id': typeof LecturesIdRoute
+  '/progress/$roll': typeof ProgressRollRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
+  '/assessments': typeof AssessmentsRoute
   '/check': typeof CheckRoute
   '/classroom': typeof ClassroomRoute
   '/dashboard': typeof DashboardRoute
   '/language': typeof LanguageRoute
   '/lessons': typeof LessonsRoute
+  '/progress': typeof ProgressRouteWithChildren
+  '/remedial': typeof RemedialRoute
   '/lectures/$id': typeof LecturesIdRoute
+  '/progress/$roll': typeof ProgressRollRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/analytics'
+    | '/assessments'
     | '/check'
     | '/classroom'
     | '/dashboard'
     | '/language'
     | '/lessons'
+    | '/progress'
+    | '/remedial'
     | '/lectures/$id'
+    | '/progress/$roll'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/analytics'
+    | '/assessments'
     | '/check'
     | '/classroom'
     | '/dashboard'
     | '/language'
     | '/lessons'
+    | '/progress'
+    | '/remedial'
     | '/lectures/$id'
+    | '/progress/$roll'
   id:
     | '__root__'
     | '/'
     | '/analytics'
+    | '/assessments'
     | '/check'
     | '/classroom'
     | '/dashboard'
     | '/language'
     | '/lessons'
+    | '/progress'
+    | '/remedial'
     | '/lectures/$id'
+    | '/progress/$roll'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalyticsRoute: typeof AnalyticsRoute
+  AssessmentsRoute: typeof AssessmentsRoute
   CheckRoute: typeof CheckRoute
   ClassroomRoute: typeof ClassroomRoute
   DashboardRoute: typeof DashboardRoute
   LanguageRoute: typeof LanguageRoute
   LessonsRoute: typeof LessonsRoute
+  ProgressRoute: typeof ProgressRouteWithChildren
+  RemedialRoute: typeof RemedialRoute
   LecturesIdRoute: typeof LecturesIdRoute
 }
 
@@ -148,6 +199,13 @@ declare module '@tanstack/react-router' {
       path: '/analytics'
       fullPath: '/analytics'
       preLoaderRoute: typeof AnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessments': {
+      id: '/assessments'
+      path: '/assessments'
+      fullPath: '/assessments'
+      preLoaderRoute: typeof AssessmentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/check': {
@@ -185,6 +243,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LessonsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/progress': {
+      id: '/progress'
+      path: '/progress'
+      fullPath: '/progress'
+      preLoaderRoute: typeof ProgressRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/remedial': {
+      id: '/remedial'
+      path: '/remedial'
+      fullPath: '/remedial'
+      preLoaderRoute: typeof RemedialRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lectures/$id': {
       id: '/lectures/$id'
       path: '/lectures/$id'
@@ -192,17 +264,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LecturesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/progress/$roll': {
+      id: '/progress/$roll'
+      path: '/$roll'
+      fullPath: '/progress/$roll'
+      preLoaderRoute: typeof ProgressRollRouteImport
+      parentRoute: typeof ProgressRoute
+    }
   }
 }
+
+interface ProgressRouteChildren {
+  ProgressRollRoute: typeof ProgressRollRoute
+}
+
+const ProgressRouteChildren: ProgressRouteChildren = {
+  ProgressRollRoute: ProgressRollRoute,
+}
+
+const ProgressRouteWithChildren = ProgressRoute._addFileChildren(
+  ProgressRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalyticsRoute: AnalyticsRoute,
+  AssessmentsRoute: AssessmentsRoute,
   CheckRoute: CheckRoute,
   ClassroomRoute: ClassroomRoute,
   DashboardRoute: DashboardRoute,
   LanguageRoute: LanguageRoute,
   LessonsRoute: LessonsRoute,
+  ProgressRoute: ProgressRouteWithChildren,
+  RemedialRoute: RemedialRoute,
   LecturesIdRoute: LecturesIdRoute,
 }
 export const routeTree = rootRouteImport

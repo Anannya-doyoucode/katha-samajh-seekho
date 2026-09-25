@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Shell, PageTitle } from "@/components/katha/Shell";
@@ -8,7 +8,7 @@ import { CLASS_INFO, TOPICS, statusOf } from "@/lib/school-data";
 import { langName, type Status } from "@/lib/katha-data";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/progress")({
+export const Route = createFileRoute("/progress/")({
   head: () => ({
     meta: [
       { title: "Student Progress — KATHA" },
@@ -19,14 +19,8 @@ export const Route = createFileRoute("/progress")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: ProgressLayout,
+  component: ProgressTable,
 });
-
-function ProgressLayout() {
-  const path = useRouterState({ select: (s) => s.location.pathname });
-  if (path !== "/progress") return <Outlet />;
-  return <ProgressTable />;
-}
 
 function ProgressTable() {
   const { students, latest } = useSchool();

@@ -116,7 +116,7 @@ function Player({ lecture }: { lecture: Lecture }) {
               onEnded={() => setPlaying(false)}
             />
           ) : (
-            <div className="flex h-full flex-col items-center justify-center bg-[oklch(0.93_0.03_120)] text-center">
+            <div className="flex h-full flex-col items-center justify-center bg-secondary text-center">
               <span className="text-7xl md:text-8xl" aria-hidden>{seg?.visual ?? "🌱"}</span>
               <p className="mt-3 font-serif text-lg font-bold text-foreground/80 md:text-2xl">{lecture.title}</p>
               <p className="text-xs text-foreground/60">Sample lecture visuals · {lecture.cls} {lecture.subject}</p>
