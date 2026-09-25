@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { BookOpen, LayoutDashboard, Languages, Mic, ClipboardCheck, BarChart3, Wifi, WifiOff, LogOut } from "lucide-react";
+import { BookOpen, LayoutDashboard, Languages, Mic, ClipboardCheck, Users, LifeBuoy, Wifi, WifiOff, LogOut } from "lucide-react";
 import { useKatha } from "@/lib/katha-store";
 import { langName } from "@/lib/katha-data";
 import { Switch } from "@/components/ui/switch";
@@ -9,10 +9,10 @@ import { cn } from "@/lib/utils";
 const NAV = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/lessons", label: "Lessons", icon: BookOpen },
-  { to: "/language", label: "Language", icon: Languages },
-  { to: "/classroom", label: "Live Class", icon: Mic },
-  { to: "/check", label: "Understanding", icon: ClipboardCheck },
-  { to: "/analytics", label: "Analytics", icon: BarChart3 },
+  { to: "/classroom", label: "Live Classroom", icon: Mic },
+  { to: "/assessments", label: "Assessments", icon: ClipboardCheck },
+  { to: "/progress", label: "Student Progress", icon: Users },
+  { to: "/remedial", label: "Remedial Sessions", icon: LifeBuoy },
 ] as const;
 
 export function BrandMark({ compact = false }: { compact?: boolean }) {
@@ -63,7 +63,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
           <div className="order-3 w-full overflow-x-auto md:order-2 md:w-auto">
             <nav className="flex items-center gap-1">
               {NAV.map((item) => {
-                const active = pathname === item.to;
+                const active = pathname === item.to || pathname.startsWith(item.to + "/") || (item.to === "/lessons" && pathname.startsWith("/lectures"));
                 return (
                   <Link
                     key={item.to}
@@ -103,6 +103,9 @@ export function Shell({ children }: { children: React.ReactNode }) {
             </div>
             {teacher && (
               <div className="flex items-center gap-2 border-l pl-3">
+                <Link to="/language" className="text-muted-foreground hover:text-foreground" title="Language settings">
+                  <Languages className="h-4 w-4" />
+                </Link>
                 <span className="hidden text-xs text-muted-foreground sm:inline">{teacher}</span>
                 <Link to="/" onClick={logout} className="text-muted-foreground hover:text-foreground" title="Sign out">
                   <LogOut className="h-4 w-4" />
@@ -112,7 +115,10 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8">{children}</main>
+      <main className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8">
+        <FlowStrip />
+        {children}
+      </main>
       <footer className="mx-auto max-w-7xl px-4 pb-8 text-xs text-muted-foreground md:px-6">
         KATHA — multilingual teaching assistant for government primary schools. Prototype with sample
         vernacular content for English, Hindi, Santhali, Ho and Mundari.
@@ -141,5 +147,43 @@ export function PageTitle({
       </div>
       {right}
     </div>
+  );
+}
+
+const FLOW = [
+  { label: "Translate", to: "/lessons" },
+  { label: "Adapt", to: "/lessons" },
+  { label: "Teach", to: "/classroom" },
+  { label: "Assess", to: "/assessments" },
+  { label: "Identify gaps", to: "/progress" },
+  { label: "Remediate", to: "/remedial" },
+] as const;
+
+/** The KATHA learning loop, shown on every screen with the current step highlighted. */
+export function FlowStrip() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const current = pathname.startsWith("/lectures") || pathname === "/lessons" || pathname === "/language"
+    ? [0, 1]
+    : pathname === "/classroom" ? [2]
+    : pathname.startsWith("/assessments") || pathname === "/check" ? [3]
+    : pathname.startsWith("/progress") || pathname === "/analytics" ? [4]
+    : pathname === "/remedial" ? [5] : [];
+  return (
+    <ol className="mb-5 flex flex-wrap items-center gap-1 text-[11px] text-muted-foreground" aria-label="KATHA learning loop">
+      {FLOW.map((f, i) => (
+        <li key={f.label} className="flex items-center gap-1">
+          <Link
+            to={f.to}
+            className={cn(
+              "rounded-full border px-2 py-0.5",
+              current.includes(i) ? "border-primary bg-primary text-primary-foreground" : "hover:bg-secondary",
+            )}
+          >
+            {i + 1}. {f.label}
+          </Link>
+          {i < FLOW.length - 1 && <span aria-hidden>→</span>}
+        </li>
+      ))}
+    </ol>
   );
 }
