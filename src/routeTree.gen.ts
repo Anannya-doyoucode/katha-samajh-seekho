@@ -17,9 +17,9 @@ import { Route as ClassroomRouteImport } from './routes/classroom'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as LanguageRouteImport } from './routes/language'
 import { Route as LessonsRouteImport } from './routes/lessons'
-import { Route as ProgressRouteImport } from './routes/progress'
 import { Route as RemedialRouteImport } from './routes/remedial'
 import { Route as LecturesIdRouteImport } from './routes/lectures.$id'
+import { Route as ProgressIndexRouteImport } from './routes/progress.index'
 import { Route as ProgressRollRouteImport } from './routes/progress.$roll'
 
 const IndexRoute = IndexRouteImport.update({
@@ -62,11 +62,6 @@ const LessonsRoute = LessonsRouteImport.update({
   path: '/lessons',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProgressRoute = ProgressRouteImport.update({
-  id: '/progress',
-  path: '/progress',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const RemedialRoute = RemedialRouteImport.update({
   id: '/remedial',
   path: '/remedial',
@@ -77,10 +72,15 @@ const LecturesIdRoute = LecturesIdRouteImport.update({
   path: '/lectures/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProgressIndexRoute = ProgressIndexRouteImport.update({
+  id: '/progress/',
+  path: '/progress/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProgressRollRoute = ProgressRollRouteImport.update({
-  id: '/$roll',
-  path: '/$roll',
-  getParentRoute: () => ProgressRoute,
+  id: '/progress/$roll',
+  path: '/progress/$roll',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -92,10 +92,10 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/language': typeof LanguageRoute
   '/lessons': typeof LessonsRoute
-  '/progress': typeof ProgressRouteWithChildren
   '/remedial': typeof RemedialRoute
   '/lectures/$id': typeof LecturesIdRoute
   '/progress/$roll': typeof ProgressRollRoute
+  '/progress/': typeof ProgressIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -106,10 +106,10 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/language': typeof LanguageRoute
   '/lessons': typeof LessonsRoute
-  '/progress': typeof ProgressRouteWithChildren
   '/remedial': typeof RemedialRoute
   '/lectures/$id': typeof LecturesIdRoute
   '/progress/$roll': typeof ProgressRollRoute
+  '/progress': typeof ProgressIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -121,10 +121,10 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/language': typeof LanguageRoute
   '/lessons': typeof LessonsRoute
-  '/progress': typeof ProgressRouteWithChildren
   '/remedial': typeof RemedialRoute
   '/lectures/$id': typeof LecturesIdRoute
   '/progress/$roll': typeof ProgressRollRoute
+  '/progress/': typeof ProgressIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -137,10 +137,10 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/language'
     | '/lessons'
-    | '/progress'
     | '/remedial'
     | '/lectures/$id'
     | '/progress/$roll'
+    | '/progress/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -151,10 +151,10 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/language'
     | '/lessons'
-    | '/progress'
     | '/remedial'
     | '/lectures/$id'
     | '/progress/$roll'
+    | '/progress'
   id:
     | '__root__'
     | '/'
@@ -165,10 +165,10 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/language'
     | '/lessons'
-    | '/progress'
     | '/remedial'
     | '/lectures/$id'
     | '/progress/$roll'
+    | '/progress/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -180,9 +180,10 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   LanguageRoute: typeof LanguageRoute
   LessonsRoute: typeof LessonsRoute
-  ProgressRoute: typeof ProgressRouteWithChildren
   RemedialRoute: typeof RemedialRoute
   LecturesIdRoute: typeof LecturesIdRoute
+  ProgressRollRoute: typeof ProgressRollRoute
+  ProgressIndexRoute: typeof ProgressIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -243,13 +244,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LessonsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/progress': {
-      id: '/progress'
-      path: '/progress'
-      fullPath: '/progress'
-      preLoaderRoute: typeof ProgressRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/remedial': {
       id: '/remedial'
       path: '/remedial'
@@ -264,27 +258,22 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LecturesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/progress/': {
+      id: '/progress/'
+      path: '/progress'
+      fullPath: '/progress/'
+      preLoaderRoute: typeof ProgressIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/progress/$roll': {
       id: '/progress/$roll'
-      path: '/$roll'
+      path: '/progress/$roll'
       fullPath: '/progress/$roll'
       preLoaderRoute: typeof ProgressRollRouteImport
-      parentRoute: typeof ProgressRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
-
-interface ProgressRouteChildren {
-  ProgressRollRoute: typeof ProgressRollRoute
-}
-
-const ProgressRouteChildren: ProgressRouteChildren = {
-  ProgressRollRoute: ProgressRollRoute,
-}
-
-const ProgressRouteWithChildren = ProgressRoute._addFileChildren(
-  ProgressRouteChildren,
-)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -295,9 +284,10 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   LanguageRoute: LanguageRoute,
   LessonsRoute: LessonsRoute,
-  ProgressRoute: ProgressRouteWithChildren,
   RemedialRoute: RemedialRoute,
   LecturesIdRoute: LecturesIdRoute,
+  ProgressRollRoute: ProgressRollRoute,
+  ProgressIndexRoute: ProgressIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

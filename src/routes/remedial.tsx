@@ -12,14 +12,17 @@ import { useSchool } from "@/lib/school-store";
 import { TOPICS, type TopicId } from "@/lib/school-data";
 import { langName, type LangCode } from "@/lib/katha-data";
 
-type Search = { topic?: TopicId; students?: number; lang?: LangCode };
+type Search = { topic?: TopicId | undefined; students?: number | undefined; lang?: LangCode | undefined };
 
 export const Route = createFileRoute("/remedial")({
-  validateSearch: (s: Record<string, unknown>): Search => ({
+  validateSearch: (raw: Record<string, unknown>): Search => {
+    const s = raw as { topic?: unknown; students?: unknown; lang?: unknown };
+    return {
     topic: typeof s.topic === "string" && s.topic in TOPICS ? (s.topic as TopicId) : undefined,
     students: typeof s.students === "number" ? s.students : undefined,
     lang: typeof s.lang === "string" ? (s.lang as LangCode) : undefined,
-  }),
+    };
+  },
   head: () => ({
     meta: [
       { title: "Remedial Sessions — KATHA" },
